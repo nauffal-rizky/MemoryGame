@@ -7,40 +7,94 @@
 
 .wrapper {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	gap: 10px;
 	min-height: 100vh;
 	background-color: #6563ff;
+}
+.title {
+	/* position: absolute;
+	top: 100px; */
+	color: #fff;
+	font-family: "Poppins", sans-serif;
 }
 .gameboard {
 	width: 400px;
 	height: 400px;
 	background-color: #f8f8f8;
+	padding: 25px;
 	border-radius: 10px;
 }
 .cards,
 .card,
 .view {
 	display: flex;
+	justify-content: center;
 	align-items: center;
 }
 .cards {
 	width: 100%;
 	height: 100%;
 	flex-wrap: wrap;
+	justify-content: space-between;
 }
 .cards .card {
+	position: relative;
+	perspective: 800px;
+	transform-style: preserve-3d;
 	width: calc(100% / 4 - 10px);
 	height: calc(100% / 4 - 10px);
 	cursor: pointer;
 }
+.card.shake {
+	animation: shake 0.35s ease-in-out;
+}
+@keyframes shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	20% {
+		transform: translateX(-13px);
+	}
+	40% {
+		transform: translateX(13px);
+	}
+	60% {
+		transform: translateX(-8px);
+	}
+	80% {
+		transform: translateX(8px);
+	}
+}
+
 .cards .card .view {
+	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-color: red;
+	background-color: #fff;
+	border-radius: 7px;
+	box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+	user-select: none;
+	pointer-events: none;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	transition: transform 0.25s linear;
 }
-.card .front-view {
-	display: none;
+.card .front-view i {
+	color: #6563ff;
+	font-size: 40px;
+}
+.card.flip .front-view {
+	transform: rotateY(180deg);
+}
+.card .back-view {
+	transform: rotateY(-180deg);
+}
+.card.flip .back-view {
+	transform: rotateY(0deg);
 }
 .card .back-view img {
 	max-width: 45px;
