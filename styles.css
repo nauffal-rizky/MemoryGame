@@ -1,0 +1,47 @@
+* {
+	margin: 0;
+	padding: 0;
+	text-decoration: none;
+	box-sizing: border-box;
+}
+
+.wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	background-color: #6563ff;
+}
+.gameboard {
+	width: 400px;
+	height: 400px;
+	background-color: #f8f8f8;
+	border-radius: 10px;
+}
+.cards,
+.card,
+.view {
+	display: flex;
+	align-items: center;
+}
+.cards {
+	width: 100%;
+	height: 100%;
+	flex-wrap: wrap;
+}
+.cards .card {
+	width: calc(100% / 4 - 10px);
+	height: calc(100% / 4 - 10px);
+	cursor: pointer;
+}
+.cards .card .view {
+	width: 100%;
+	height: 100%;
+	background-color: red;
+}
+.card .front-view {
+	display: none;
+}
+.card .back-view img {
+	max-width: 45px;
+}
