@@ -1,3 +1,24 @@
+const mainMenu = document.querySelector(".main-menu");
+const modeMenu = document.querySelector(".mode-menu");
+const gameMenu = document.querySelector(".game-menu");
+
+const playBtn = mainMenu.querySelector(".play-btn");
+playBtn.addEventListener("click", () => {
+	mainMenu.classList.remove("show");
+	modeMenu.classList.add("show");
+});
+const normalModeBtn = document.querySelector(".normal-mode-btn");
+normalModeBtn.addEventListener("click", () => {
+	modeMenu.classList.remove("show");
+	gameMenu.classList.add("show");
+});
+const advancedModeBtn = document.querySelector(".advanced-mode-btn");
+advancedModeBtn.addEventListener("click", () => {
+	modeMenu.classList.remove("show");
+	gameMenu.classList.add("show");
+});
+
+/* GAME SYSTEM */
 let cardOne, cardTwo;
 let disableGame = false;
 let matchedCards = 0;
@@ -70,4 +91,22 @@ shuffleCards();
 
 cards.forEach((card) => {
 	card.addEventListener("click", flipCard);
+});
+
+/* MODE DROPDOWN */
+const modeBtns = document.querySelectorAll(".mode button");
+modeBtns.forEach((btn) => {
+	window.addEventListener("mouseover", (e) => {
+		const dropdown = btn.nextElementSibling;
+		const dropdownHeight = dropdown.getBoundingClientRect().height;
+		const dropdownContent = dropdown
+			.querySelector("ul")
+			.getBoundingClientRect().height;
+		if (e.target === btn && dropdownHeight == 0) {
+			console.log(dropdownContent);
+			dropdown.style.height = `${dropdownContent}px`;
+		} else if (e.target !== btn && dropdownHeight > 0) {
+			dropdown.style.height = 0;
+		}
+	});
 });
