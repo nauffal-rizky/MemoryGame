@@ -4,6 +4,7 @@ let time = 60;
 
 const mainMenu = document.querySelector('.main-menu');
 const modeMenu = document.querySelector('.mode-menu');
+const ruready = document.querySelector('.ruready');
 const gameMenu = document.querySelector('.game-menu');
 const goBackBtn = document.querySelector('.go-back-btn');
 
@@ -26,7 +27,6 @@ const exitBtn = document.querySelector('.exit-btn');
 const level = document.querySelector('#level');
 const gameboard = document.querySelector('.gameboard');
 
-const advanceContain = document.querySelector('.advance-features');
 normalModeBtn.addEventListener('click', () => {
   modeMenu.classList.remove('show');
   gameboard.style.height = '400px';
@@ -38,13 +38,16 @@ normalModeBtn.addEventListener('click', () => {
   exitBtn.classList.remove('hide');
 });
 
+const advanceContain = document.querySelector('.advance-features');
 const advancedModeBtn = document.querySelector('.advanced-mode-btn');
 advancedModeBtn.addEventListener('click', () => {
   modeMenu.classList.remove('show');
 
   gameboard.style.height = '450px';
   advanceContain.classList.remove('hide');
-  gameMenu.classList.add('show');
+  ruready.classList.add('show');
+
+  level.textContent = `Advance`;
 
   goBackBtn.classList.add('hide');
   exitBtn.classList.remove('hide');
@@ -54,6 +57,44 @@ exitBtn.addEventListener('click', () => {
   exitBtn.classList.add('hide');
   gameMenu.classList.remove('show');
   mainMenu.classList.add('show');
+});
+
+/* COUNTDOWN */
+const rureadyQ = ruready.querySelector('.ruready-header');
+const countdown = ruready.querySelector('#countdown');
+const readyBtn = rureadyQ.querySelector('.ready-btn');
+readyBtn.addEventListener('click', () => {
+  rureadyQ.classList.add('hide');
+  setTimeout(() => {
+    countdown.textContent = 3;
+    countdown.classList.remove('hide');
+    countdown.classList.add('fade');
+  }, 500);
+  setTimeout(() => {
+    countdown.classList.remove('fade');
+    countdown.classList.add('hide');
+  }, 2000);
+  setTimeout(() => {
+    countdown.textContent = 2;
+    countdown.classList.remove('hide');
+    countdown.classList.add('fade');
+  }, 2500);
+  setTimeout(() => {
+    countdown.classList.remove('fade');
+    countdown.classList.add('hide');
+  }, 4000);
+  setTimeout(() => {
+    countdown.textContent = 1;
+    countdown.classList.remove('hide');
+    countdown.classList.add('fade');
+  }, 4500);
+  setTimeout(() => {
+    countdown.classList.remove('fade');
+    countdown.classList.add('hide');
+  }, 6000);
+  setTimeout(() => {
+    gameMenu.classList.add('show');
+  }, 6500);
 });
 
 /* GAME SYSTEM */
