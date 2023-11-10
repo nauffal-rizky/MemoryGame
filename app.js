@@ -1,5 +1,5 @@
 // ROOT
-let flip = 0;
+let flips = 0;
 let time = 60;
 
 const mainMenu = document.querySelector('.main-menu');
@@ -24,19 +24,25 @@ goBackBtn.addEventListener('click', () => {
 // NORMAL - ADVANCE
 const normalModeBtn = document.querySelector('.normal-mode-btn');
 const exitBtn = document.querySelector('.exit-btn');
+const refreshBtn = document.querySelector('.refresh-btn');
 const level = document.querySelector('#level');
 const gameboard = document.querySelector('.gameboard');
+const surrenderBtn = document.querySelector('.surrender');
 
 normalModeBtn.addEventListener('click', () => {
   modeMenu.classList.remove('show');
+  goBackBtn.classList.add('hide');
+
   gameboard.style.height = '400px';
   gameMenu.classList.add('show');
 
   level.textContent = `Normal`;
-
-  goBackBtn.classList.add('hide');
+  surrenderBtn.classList.remove('hide');
   exitBtn.classList.remove('hide');
 });
+
+const timeLeft = document.querySelector('#time-left');
+const flipsAmount = document.querySelector('#flips-amount');
 
 const advanceContain = document.querySelector('.advance-features');
 const advancedModeBtn = document.querySelector('.advanced-mode-btn');
@@ -51,10 +57,16 @@ advancedModeBtn.addEventListener('click', () => {
 
   goBackBtn.classList.add('hide');
   exitBtn.classList.remove('hide');
+
+  /* ADVANCE SYSTEM */
+  setInterval(() => {}, 1000);
+  timeLeft.textContent = time;
+  flipsAmount.textContent = flips;
 });
 
 exitBtn.addEventListener('click', () => {
   exitBtn.classList.add('hide');
+  surrenderBtn.classList.add('hide');
   gameMenu.classList.remove('show');
   mainMenu.classList.add('show');
 });
@@ -109,6 +121,9 @@ const flipCard = (e) => {
 
   if (clickedCard !== cardOne && !disableGame) {
     clickedCard.classList.add('flip');
+    flips += 1;
+    flipsAmount.textContent = flips;
+    console.log(flips);
 
     if (!cardOne) {
       return (cardOne = clickedCard);
@@ -167,6 +182,7 @@ const shuffleCards = () => {
   });
 };
 shuffleCards();
+refreshBtn.addEventListener('click', shuffleCards);
 
 cards.forEach((card) => {
   card.addEventListener('click', flipCard);
