@@ -303,6 +303,8 @@ article,
   align-items: center;
   gap: 10px;
 }
+.go-back-btn,
+.exit-btn,
 .ruready-header,
 #countdown {
   transition: none;

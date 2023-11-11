@@ -1,15 +1,17 @@
 // ROOT
 let flips = 0;
-let time = 60;
+let time = 10;
 let countdownInterval;
 let cardOne, cardTwo;
 let disableGame = false;
 let matchedCards = 0;
+let refreshed = false;
 
 const mainMenu = document.querySelector('.main-menu');
 const modeMenu = document.querySelector('.mode-menu');
 const ruready = document.querySelector('.ruready');
 const gameMenu = document.querySelector('.game-menu');
+const cards = document.querySelectorAll('.card');
 const goBackBtn = document.querySelector('.go-back-btn');
 
 const playBtn = mainMenu.querySelector('.play-btn');
@@ -66,9 +68,10 @@ const startGame = () => {
   modeMenu.classList.remove('show');
 };
 const endGame = () => {
+  clearInterval(countdownInterval);
+
   exitBtn.classList.add('hide');
   surrenderBtn.classList.add('hide');
-  ruready.classList.remove('show');
   gameMenu.classList.remove('show');
   mainMenu.classList.add('show');
 };
@@ -82,6 +85,7 @@ const countdown = ruready.querySelector('#countdown');
 const readyBtn = rureadyQ.querySelector('.ready-btn');
 readyBtn.addEventListener('click', () => {
   rureadyQ.classList.add('hide');
+
   setTimeout(() => {
     countdown.textContent = 3;
     countdown.classList.remove('hide');
@@ -110,11 +114,18 @@ readyBtn.addEventListener('click', () => {
     countdown.classList.add('hide');
   }, 6000);
   setTimeout(() => {
+    ruready.classList.remove('show');
+    rureadyQ.classList.remove('hide');
     gameMenu.classList.add('show');
+
+    countdown.textContent = '';
     countdownInterval = setInterval(() => {
       time -= 1;
       timeLeft.textContent = time;
       if (time == 0) {
+        cards.forEach((card) => {
+          card.removeEventListener('click', flipCard);
+        });
         clearInterval(countdownInterval);
       }
     }, 1000);
@@ -122,8 +133,6 @@ readyBtn.addEventListener('click', () => {
 });
 
 /* GAME SYSTEM */
-const cards = document.querySelectorAll('.card');
-
 const flipCard = (e) => {
   let clickedCard = e.target;
 
@@ -200,12 +209,28 @@ refreshBtn.addEventListener('click', () => {
   flips = 0;
   flipsAmount.textContent = flips;
 
-  time = 60;
+  time = 10;
   timeLeft.textContent = time;
+  refreshed = true;
 });
 
 cards.forEach((card) => {
-  card.addEventListener('click', flipCard);
+  card.addEventListener('click', () => {
+    if (refreshed) {
+      countdownInterval = setInterval(() => {
+        time -= 1;
+        timeLeft.textContent = time;
+        if (time == 0) {
+          clearInterval(countdownInterval);
+          cards.forEach((card) => {
+            card.removeEventListener('click', flipCard);
+          });
+        }
+      }, 1000);
+    }
+    refreshed = false;
+    flipCard;
+  });
 });
 
 /* MODE DROPDOWN */
