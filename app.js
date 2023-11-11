@@ -1,6 +1,10 @@
 // ROOT
 let flips = 0;
 let time = 60;
+let countdownInterval;
+let cardOne, cardTwo;
+let disableGame = false;
+let matchedCards = 0;
 
 const mainMenu = document.querySelector('.main-menu');
 const modeMenu = document.querySelector('.mode-menu');
@@ -30,15 +34,11 @@ const gameboard = document.querySelector('.gameboard');
 const surrenderBtn = document.querySelector('.surrender');
 
 normalModeBtn.addEventListener('click', () => {
-  modeMenu.classList.remove('show');
-  goBackBtn.classList.add('hide');
-
+  startGame();
   gameboard.style.height = '400px';
   gameMenu.classList.add('show');
 
   level.textContent = `Normal`;
-  surrenderBtn.classList.remove('hide');
-  exitBtn.classList.remove('hide');
 });
 
 const timeLeft = document.querySelector('#time-left');
@@ -47,29 +47,34 @@ const flipsAmount = document.querySelector('#flips-amount');
 const advanceContain = document.querySelector('.advance-features');
 const advancedModeBtn = document.querySelector('.advanced-mode-btn');
 advancedModeBtn.addEventListener('click', () => {
-  modeMenu.classList.remove('show');
-
+  startGame();
   gameboard.style.height = '450px';
   advanceContain.classList.remove('hide');
   ruready.classList.add('show');
 
   level.textContent = `Advance`;
 
-  goBackBtn.classList.add('hide');
-  exitBtn.classList.remove('hide');
-
   /* ADVANCE SYSTEM */
-  setInterval(() => {}, 1000);
   timeLeft.textContent = time;
   flipsAmount.textContent = flips;
 });
 
-exitBtn.addEventListener('click', () => {
+const startGame = () => {
+  goBackBtn.classList.add('hide');
+  exitBtn.classList.remove('hide');
+  surrenderBtn.classList.remove('hide');
+  modeMenu.classList.remove('show');
+};
+const endGame = () => {
   exitBtn.classList.add('hide');
   surrenderBtn.classList.add('hide');
+  ruready.classList.remove('show');
   gameMenu.classList.remove('show');
   mainMenu.classList.add('show');
-});
+};
+
+surrenderBtn.addEventListener('click', endGame);
+exitBtn.addEventListener('click', endGame);
 
 /* COUNTDOWN */
 const rureadyQ = ruready.querySelector('.ruready-header');
@@ -106,14 +111,17 @@ readyBtn.addEventListener('click', () => {
   }, 6000);
   setTimeout(() => {
     gameMenu.classList.add('show');
+    countdownInterval = setInterval(() => {
+      time -= 1;
+      timeLeft.textContent = time;
+      if (time == 0) {
+        clearInterval(countdownInterval);
+      }
+    }, 1000);
   }, 6500);
 });
 
 /* GAME SYSTEM */
-let cardOne, cardTwo;
-let disableGame = false;
-let matchedCards = 0;
-
 const cards = document.querySelectorAll('.card');
 
 const flipCard = (e) => {
@@ -123,7 +131,6 @@ const flipCard = (e) => {
     clickedCard.classList.add('flip');
     flips += 1;
     flipsAmount.textContent = flips;
-    console.log(flips);
 
     if (!cardOne) {
       return (cardOne = clickedCard);
@@ -140,10 +147,12 @@ const flipCard = (e) => {
 const matchCard = (imgOne, imgTwo) => {
   if (imgOne === imgTwo) {
     matchedCards++;
-    if (matchedCards == 8) {
+    if (matchedCards == 8 && advanceContain.classList.contains('hide')) {
       setTimeout(() => {
         return shuffleCards();
       }, 1000);
+    } else if (matchedCards == 8 && !advanceContain.classList.contains('hide')) {
+      clearInterval(countdownInterval);
     }
 
     cardOne.removeEventListener('click', flipCard);
@@ -182,7 +191,18 @@ const shuffleCards = () => {
   });
 };
 shuffleCards();
-refreshBtn.addEventListener('click', shuffleCards);
+
+/* REFRESH */
+refreshBtn.addEventListener('click', () => {
+  shuffleCards();
+  clearInterval(countdownInterval);
+
+  flips = 0;
+  flipsAmount.textContent = flips;
+
+  time = 60;
+  timeLeft.textContent = time;
+});
 
 cards.forEach((card) => {
   card.addEventListener('click', flipCard);
